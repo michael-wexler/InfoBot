@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import org.jsoup.Jsoup;
@@ -17,6 +18,7 @@ public class infobot extends JFrame implements ActionListener {
 	private JTextField textField = new JTextField();                                  
 	private JButton button = new JButton();
 	private JLabel label = new JLabel();
+	private JScrollPane scroll = new JScrollPane();
 	public infobot(){                                                                          
 		JFrame frame = new JFrame();                                     
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);                      
@@ -29,15 +31,17 @@ public class infobot extends JFrame implements ActionListener {
 		frame.add(textField);
 		frame.add(textArea);
 		frame.add(button);
-		textArea.setSize(1500,310);
+		scroll.setVerticalScrollBarPolicy(scroll.VERTICAL_SCROLLBAR_ALWAYS);
+		frame.getContentPane().add(scroll);
+		textArea.setSize(1500,610);
 		textArea.setLocation(1, 1);
 		textArea.setBackground(Color.white);
 		textField.setSize(1500,60);
-		textField.setLocation(1,400);
+		textField.setLocation(1,650);
 		label.setText("SEND");
 		button.add(label);
 		button.setSize(80,40);
-		button.setLocation(710,360);
+		button.setLocation(710,725);
 		button.addActionListener(this); 
 	}
 	public void actionPerformed(ActionEvent e) {
@@ -61,7 +65,6 @@ public class infobot extends JFrame implements ActionListener {
 				response("Goodbye. Have a nice day!");
 			}
 			else if (text.contains("who is") || text.contains("what is")) {
-
 				String content = "";
 				if (text.contains("who is")) {
 					content = text.substring(7);
@@ -74,7 +77,7 @@ public class infobot extends JFrame implements ActionListener {
 					doc = Jsoup.connect("http://en.wikipedia.org/wiki/" + content.replace(" ", "_")).get();
 					Elements paragraphs = doc.select("p");
 					String data = paragraphs.text();
-					String caption = data.substring(0, 205) + "\n ... for more info visit http://en.wikipedia.org/wiki/" + content.replace(" ", "_");
+					String caption = data.substring(0, 205) + "\n" + data.substring(205, 410) + "\n ... for more info visit http://en.wikipedia.org/wiki/" + content.replace(" ", "_");
 					response(caption);
 				} catch (IOException e1) {
 					response("I'm not sure I understand. Is there anything else I can help you with?");
